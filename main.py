@@ -1,10 +1,11 @@
+import copy
 import tkinter as tk
 from tkinter import filedialog
 import os
 import matplotlib.pyplot as plt
 
 
-class PlotGenerator:
+class PlotGeneratorPrototype:
     def __init__(self):
         self.file_path = None
         self.current_plot = None
@@ -33,8 +34,6 @@ class PlotGenerator:
             plt.title(title)
             self.current_plot = plt.gcf()
 
-
-
     def plot_bar(self, x_label='', y_label='', title=''):
         if not self.file_path:
             print('Error: select file')
@@ -48,11 +47,13 @@ class PlotGenerator:
                 data = data[1:]
             x = [d.split(',')[0] for d in data]
             y = [float(d.split(',')[1]) for d in data]
-            plt.bar(x, y)
+            fig, ax = plt.subplots()
+            ax.bar(x, y)
+            plt.xlabel(x_label)
             plt.ylabel(y_label)
             plt.title(title)
-            self.current_plot = plt
-
+            plt.xticks(x, x)
+            self.current_plot = fig
 
     def plot_pie(self, title=''):
         if not self.file_path:
@@ -66,6 +67,7 @@ class PlotGenerator:
             values = [float(d.split(',')[1]) for d in data]
             plt.pie(values, labels=labels)
             plt.title(title)
+
 
     def _validate_data(self, data):
         if len(data) < 2:
@@ -88,7 +90,6 @@ class PlotGenerator:
     def _validate_file_extension(self, file_path):
         """
         Validate the file extension of the input file. Only text files with the .txt extension are allowed.
-
         :param file_path: path to the input file
         :return: True if the file extension is valid, False otherwise
         """
@@ -107,26 +108,25 @@ class PlotGenerator:
         self.current_plot.savefig(file_path, bbox_inches='tight')
         print(f'The chart was saved as a file {file_path}')
 
+    def clone(self):
+        return copy.deepcopy(self)
 
-if __name__ == '__main__':
+# Tworzymy nowy obiekt klasy PlotGeneratorPrototype
+plot_generator = PlotGeneratorPrototype()
+plot_generator.choose_file()
 
-    def main():
-        generator = PlotGenerator()
-        generator.choose_file()
+# Kopiujemy obiekt i zmieniamy parametry
+line_plot_generator = plot_generator.clone()
+line_plot_generator.plot_line(x_label='X Label', y_label='Y Label', title='Line Plot')
+line_plot_generator.save_current_plot('Line Plot')
 
-        plot_title = 'Line Plot'
-        generator.plot_line(x_label='X Label', y_label='Y Label', title=plot_title)
-        generator.save_current_plot(plot_title)
-        plt.clf()
+# Kopiujemy obiekt i zmieniamy parametry
+bar_plot_generator = plot_generator.clone()
+bar_plot_generator.plot_bar(x_label='X Label', y_label='Y Label', title='Bar Plot')
+bar_plot_generator.save_current_plot('Bar Plot')
 
-        plot_title = 'Bar Plot'
-        generator.plot_bar(x_label='X Label', y_label='Y Label', title=plot_title)
-        generator.save_current_plot(plot_title)
-        plt.clf()
+# Kopiujemy obiekt i zmieniamy parametry
+pie_plot_generator = plot_generator.clone()
+pie_plot_generator.plot_pie(title='Pie Chart')
+pie_plot_generator.save_current_plot('Pie Chart')
 
-        plot_title = 'Pie Plot'
-        generator.plot_pie(title=plot_title)
-        generator.save_current_plot(plot_title)
-        plt.clf()
-
-    main()
