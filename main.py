@@ -37,13 +37,7 @@ class PlotGeneratorPrototype:
             if data[0].startswith('xlabel:'):
                 x_label = data[0].split(':')[1]
                 data = data[1:]
-            x = [float(d.split(',')[0]) for d in data]
-            y = [float(d.split(',')[1]) for d in data]
-            plt.plot(x, y)
-            plt.xlabel(x_label)
-            plt.ylabel(y_label)
-            plt.title(title)
-            self.current_plot = plt.gcf()
+                self.current_plot = plt.gcf()
 
     def plot_bar(self, x_label='', y_label='', title=''):
         """
@@ -86,10 +80,6 @@ class PlotGeneratorPrototype:
             data = file.read().splitlines()
             if not self._validate_data(data):
                 return False
-            labels = [d.split(',')[0] for d in data]
-            values = [float(d.split(',')[1]) for d in data]
-            plt.pie(values, labels=labels)
-            plt.title(title)
             self.current_plot = plt.gcf()
 
 
