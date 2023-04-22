@@ -92,12 +92,12 @@ class PlotGeneratorPrototype:
             plt.title(title)
             self.current_plot = plt.gcf()
 
-
-    def _validate_data(self, data):
+    @staticmethod
+    def _validate_data(data):
         """
-        Validates the input data for a plotting function. It checks if the data contains at least two lines, if each line contains
-        at least one comma-separated value, and if all values can be converted to floats. Prints error messages and returns False
-        if any of these conditions are not met. Returns True otherwise.
+        Validates the input data for a plotting function. It checks if the data contains at least two lines, if each
+        line contains at least one comma-separated value, and if all values can be converted to floats. Prints error
+        messages and returns False if any of these conditions are not met. Returns True otherwise.
         :param data: a list of strings representing the input data
         :return: True if the input data is valid, False otherwise
         """
@@ -117,8 +117,8 @@ class PlotGeneratorPrototype:
             return False
         return True
 
-
-    def _validate_file_extension(self, file_path):
+    @staticmethod
+    def _validate_file_extension(file_path):
         """
         Validate the file extension of the input file. Only text files with the .txt extension are allowed.
         :param file_path: path to the input file
@@ -152,11 +152,13 @@ class PlotGeneratorPrototype:
         """
         return copy.deepcopy(self)
 
+
 def main():
     """
-    The main function demonstrates the prototype design pattern using a PlotGeneratorPrototype class. It creates an instance
-    of the class, allows the user to select a data file, clones the object to create new objects for line plot, pie chart,
-    and bar plot generation, customizes each plot with specific parameters, and saves each plot with a corresponding file name.
+    The main function demonstrates the prototype design pattern using a PlotGeneratorPrototype class. It creates an
+    instance of the class, allows the user to select a data file, clones the object to create new objects for line
+    plot, pie chart, and bar plot generation, customizes each plot with specific parameters, and saves each plot with
+    a corresponding file name.
     """
     plot_generator = PlotGeneratorPrototype()
     plot_generator.choose_file()
@@ -164,11 +166,11 @@ def main():
     line_plot_generator.plot_line(x_label='X Label', y_label='Y Label', title='Line Plot')
     line_plot_generator.save_current_plot('Line Plot')
 
-    pie_plot_generator = plot_generator.clone() # Copy the object and change the parameters
+    pie_plot_generator = plot_generator.clone()  # Copy the object and change the parameters
     pie_plot_generator.plot_pie(title='Pie Chart')
     pie_plot_generator.save_current_plot('Pie Chart')
 
-    bar_plot_generator = plot_generator.clone() # Copy the object and change the parameters
+    bar_plot_generator = plot_generator.clone()  # Copy the object and change the parameters
     bar_plot_generator.plot_bar(x_label='X Label', y_label='Y Label', title='Bar Plot')
     bar_plot_generator.save_current_plot('Bar Plot')
 
